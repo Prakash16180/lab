@@ -1,0 +1,13 @@
+1.List musician name, title of he song which he has played, the album in which song has occurred.
+2.List the details of Musician who have not produced any Album
+3. List the details of songs which are performed by more than 3 musicians.
+4. List the different instrument played by the musicians and the average number of musicians who play the instrument.
+5. Retrieve album title produced by the producer who plays guitar as well a flute and has produced no of songs greater than the average songs produced by all producers.
+6. List the details of musicians who can play all the instruments present.
+
+select m.Name, s. Title, a.Title as Album from MUSICIAN m,SONG s, PERFORM p,ALBUM a where m.SSN=p.SSN and p.song_id=s.song_id and a.Album_ID=s.al_id;
+select m.SSN,m.Name from MUSICIAN m where m.SSN not in(select m.SSN from MUSICIAN m, ALBUM a where m.SSN=a.SSN);
+select s. * from SONG s, PERFORM p where s.Song_id=p.Song_id group by p. Song_id having count(p.Song_id)>=3;
+select count(p.Inst_ID),i.Name,count(p.Inst_Id)/(select count(*) from MUSICIAN) as Average from INSTRUMENT i, PLAY p where p. Inst _ID=i.Instrument_ID group by p.lnst_ID;
+select a. Title from ALBUM a, INSTRUMENT i, PLAY p where p.lnst_ID=i.Instrument_ID and a.SSN=p.SSN and p.SSN in (select SSN from ALBUM where No_songs > (select avg(No_songs) from ALBUM)) and i.Name in ('Flute' , 'Guitar');
+select m.* from MUSICIAN m,PLAY p,INSTRUMENT i where m.SSN=p.SSN and i.instrument_id=p.inst_id and group by p.SSN having count(p.SSN) = (select count(*) from instrument);

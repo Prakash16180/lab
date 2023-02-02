@@ -1,0 +1,14 @@
+1. List the vendors with most installations in domestic places.
+2. List the place name with highest capacity panel installed.
+3. Display the area where monocrystalline panels are installed.
+4. List the place where both type of panels are installed and calculate the installation charges.
+5.List the details of vendor and panel that is the oldest installation
+6. Find the average sales of both type of panels in only commercial places
+
+
+select max(most) from (select i.tn_number as vendor,count(i.tn_number) as most from vendor v, install i where i.tn_number=v. tn_number and i.i_type="domestic" group by i. tn_number) as t;
+select u.address from user u , purchase pu, panel p where u.ho_number=pu.ho_number and p.pv_number=pu.pv_number and pu.capacity in (select max(capacity) from purchase);
+select v.*, p.name, i.doi from vendor v,panel p, install i where v.tn_number=i.tn_number and p.pv_number = i.pv_number and i.doi in (select min(doi) from install);
+select u.address, sum(i.i_charge) from user u, install i, panel p where u.ho_number=i.ho_number and p.pv_number=i.pv_number and p.name="polycrystalline" and exists(select u.address from user u, install i,panel p where u.ho_number=i.ho_number and p.pv_number=i.pv_number and p.name="monocrystalline") group by address;
+select v.*,p.name,i.doi from vendor v, panel p, install i where v.tn _number=i.tn_number and p.pv_number = i.pv_number and i.doi in (select min(doi) from install);
+mysql> select d.t_type,avg(d.i_charge) from (select i.*, s.capacity,u.address,s.name from install i inner join panel s on i.pv_number=s.pv_number Inner join user u on u.ho_number=i.ho_number where i.i_type="commercial") as d group by d.name;

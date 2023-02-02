@@ -1,0 +1,11 @@
+1. List the details of patients who are 20 years old and have been checked by eye specialist.
+2. List the details of doctors who have given the prescription to more than 20 patients in year2013.
+3. Retrieve the details of Doctor having maximum experience.
+4. List the details of pharmaceutical companies who supply drug to more than10 pharmacies in the same city where company is located.
+5. List the details of drug supplied by only one pharmaceutical company.
+
+select p.pt_name,d.d_name from patient p, checks c, doctor d where p.p_ssn=c.p_ssn and d.d_ssn=c.d_ssn and p.age=20 and d.speciality="eye";
+select d.d_name from doctor d, prescribe pr where d.d_ssn=pr.d_ssn and pr.date>"20130101" group by pr.d_ssn having count(p_ssn)>=4;
+select * from doctor where YOE in(select max(YOE) from doctor);
+select p. pc_name,p.ph_no from p _ company p, contracts c, pharmacy ph where ph.ph_name=c.ph_name and p.pc_name=c.pc_name and p.address-ph.ph_add having count(c.ph_name)>=4;
+select d. * from drug d,sold_by s, contracts c where d. trade_no=s.trade_no and s.ph_name=c.ph_name and c.pc_name="cipla";
